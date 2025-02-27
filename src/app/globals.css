@@ -45,8 +45,6 @@ body {
   position: absolute;
   inset: 0;
 
-  z-index: 50;
-
   mask: url(#cursorMask);
 
   pointer-events: none;
@@ -56,16 +54,46 @@ body {
   transition: clip-path 0.05s ease-out; */
 }
 
+.blurry-blobs-container {
+  pointer-events: none;
+  /* Make sure it doesn't interfere with interactions */
+}
+
+/* ----------------------- *
+ *                         *
+ * Landing page grid setup *
+ *                         *
+ * ----------------------- */
+
+.landing-page-content-grid {
+  display: grid;
+  grid-template: "social-media navbar"
+    "content-1 content-1"
+    "content-2 content-2";
+  grid-template-rows: 2fr 8fr 2.8fr;
+}
+
+.area-social-media {
+  grid-area: social-media;
+}
+
+.area-navbar {
+  grid-area: navbar;
+}
+
+.area-content-1 {
+  grid-area: content-1;
+}
+
+.area-content-2 {
+  grid-area: content-2;
+}
+
 .grid-overlap-container {
   display: grid;
   grid-template: "content-area";
 }
 
 .grid-overlap-element {
-  /* display: grid; */
   grid-area: content-area;
-}
-
-.blurry-blobs-container {
-  pointer-events: none; /* Make sure it doesn't interfere with interactions */
 }
