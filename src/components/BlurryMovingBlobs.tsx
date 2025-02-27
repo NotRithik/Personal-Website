@@ -120,7 +120,7 @@ const BlurryMovingBlobs: React.FC<BlurryMovingBlobsProps> = ({ className }) => {
         });
 
         const startTime = performance.now();
-        const targetFPS = 24; // Adjust this value to control fps.
+        const targetFPS = 4; // Adjust this value to control fps.
         const frameInterval = 1000 / targetFPS;
         let lastFrameTime = performance.now();
 

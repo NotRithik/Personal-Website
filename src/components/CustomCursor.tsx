@@ -8,31 +8,52 @@ import CursorCircle from "@/assets/CursorCircle.svg";
 import gsap from 'gsap';
 import throttle from 'lodash.throttle';
 
-function CustomCursor() {
+interface CustomCursor {
+    doesPageScroll: boolean
+}
+
+const CustomCursor: React.FC<CustomCursor> = ({ doesPageScroll }) => {
     const arrowsContainerRef = useRef<HTMLDivElement>(null); // Ref for the container to animate
     const maskCircleRef = useRef<SVGCircleElement>(null); // Ref for the circle INSIDE the mask
     const [isPlayingClickedAnimation, setIsPlayingClickedAnimation] = useState(false); // State to track click, renamed
 
+    const updateMaskPosition = useCallback((clientX: number, clientY: number) => {
+        if (maskCircleRef.current) {
+            gsap.to(maskCircleRef.current, { // Animate the maskCircleRef.current element
+                duration: 0.05, // Transition duration (0.05s)
+                ease: 'easeOut', // Ease-out easing
+                attr: { // Animate SVG attributes
+                    cx: clientX, // Animate 'cx' to mouse X
+                    cy: clientY + (doesPageScroll ? window.scrollY : 0) // Animate 'cy' to mouse Y, conditionally add scroll
+                }
+            });
+        }
+    }, [doesPageScroll]);
+
     useEffect(() => {
-        // Mouse move tracking (remains the same)
+        // Mouse move tracking
         const handleMouseMove = (e: MouseEvent) => {
             const rootElement = document.documentElement;
             rootElement.style.setProperty('--cursor-x', `${e.clientX}px`);
             rootElement.style.setProperty('--cursor-y', `${e.clientY}px`);
 
-            if (maskCircleRef.current) {
-                gsap.to(maskCircleRef.current, { // Animate the maskCircleRef.current element
-                    duration: 0.05, // Transition duration (0.05s)
-                    ease: 'easeOut', // Ease-out easing
-                    attr: { // Animate SVG attributes
-                        cx: e.clientX, // Animate 'cx' to mouse X
-                        cy: e.clientY  // Animate 'cy' to mouse Y
-                    }
-                });
-            }
+            updateMaskPosition(e.clientX, e.clientY);
         };
         const throttledMouseMove = throttle(handleMouseMove, 24);
         window.addEventListener('mousemove', throttledMouseMove);
+
+        // Scroll tracking - NEW
+        const handleScroll = () => {
+            // We need to get the current mouse position to update the mask correctly on scroll
+            // We can read it from the CSS variables we set in handleMouseMove
+            const rootElement = document.documentElement;
+            const cursorX = parseInt(rootElement.style.getPropertyValue('--cursor-x') || '0', 10);
+            const cursorY = parseInt(rootElement.style.getPropertyValue('--cursor-y') || '0', 10);
+
+            updateMaskPosition(cursorX, cursorY);
+        };
+        window.addEventListener('scroll', handleScroll);
+
 
         // Initial cursor position (remains the same)
         const rootElementOnMount = document.documentElement;
@@ -62,8 +83,12 @@ function CustomCursor() {
 
         }
 
-        return () => window.removeEventListener('mousemove', throttledMouseMove);
-    }, []);
+        return () => {
+            window.removeEventListener('mousemove', throttledMouseMove);
+            window.removeEventListener('scroll', handleScroll); // Remove scroll event listener
+        };
+    }, [updateMaskPosition]); // Dependency array includes updateMaskPosition
+
 
     useEffect(() => {
         // Cursor hiding (remains the same)
@@ -109,7 +134,7 @@ function CustomCursor() {
 
     const handleClickAnimation = useCallback(() => { // Renamed function, now useCallback
         setIsPlayingClickedAnimation(true); // Trigger click animation on click, renamed state
-    }, [isPlayingClickedAnimation]);
+    }, []);
 
     useEffect(() => {
         // Add click event listener to the document when component mounts
