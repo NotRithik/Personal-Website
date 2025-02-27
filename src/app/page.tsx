@@ -1,13 +1,7 @@
-// 'use client'
-
 import SocialMediaLinks from "@/components/SocialMediaLinks";
 import DownButton from "@/assets/DownButton.svg";
 import CustomCursor from "@/components/CustomCursor";
 import BlurryMovingBlobs from "@/components/BlurryMovingBlobs";
-
-
-// import React, { useRef, useEffect, useState } from 'react';
-
 
 export default function Home() {
 

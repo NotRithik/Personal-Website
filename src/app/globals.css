@@ -49,6 +49,8 @@ body {
 
   mask: url(#cursorMask);
 
+  pointer-events: none;
+
   /* clip-path: circle(28px at var(--cursor-x) var(--cursor-y));
   will-change: clip-path;
   transition: clip-path 0.05s ease-out; */
