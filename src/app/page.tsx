@@ -4,7 +4,6 @@ import CustomCursor from "@/components/CustomCursor";
 import BlurryMovingBlobs from "@/components/BlurryMovingBlobs";
 
 export default function Home() {
-
   return (
     <div className="h-screen w-full grid-overlap-container">
       <CustomCursor />

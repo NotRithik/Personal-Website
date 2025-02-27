@@ -4,9 +4,13 @@ import MailIcon from "@/icons/Mail.svg";
 import TelegramIcon from "@/icons/Telegram.svg";
 import XIcon from "@/icons/X.svg";
 
-function SocialMediaLinks() {
+interface SocialMediaLinks {
+    className?: string;
+}
+
+const SocialMediaLinks: React.FC<SocialMediaLinks> = ({ className }) => {
     return (
-        <div className="flex flex-row gap-10 justify-center items-center h-10">
+        <div className={`flex flex-row gap-10 justify-center items-center h-10 ${className ? className : ""}`}>
             <a href="https://linkedin.com/in/notrithik" target="_blank">
                 <LinkedInIcon className="h-10" />
             </a>
