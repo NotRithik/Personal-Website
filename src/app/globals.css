@@ -2,20 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* :root { */
+/* --background: #ffffff;
+  --foreground: #171717; */
+/* } */
 
-@media (prefers-color-scheme: dark) {
-  :root {
+/* @media (prefers-color-scheme: dark) {
+  /* :root {
     --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+    --foreground: #ededed; */
+/* } */
+/* } */
 
 body {
-  color: var(--foreground);
+  /* color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Arial, Helvetica, sans-serif; */
+  /* cursor: none !important; */
+  /* Initialize CSS variables for cursor position */
+  /* --cursor-x: 0;
+  --cursor-y: 0; */
+  min-height: 100vh;
+  min-width: 100vw;
+}
+
+.custom-cursor {
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+
+  transform: translate(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%));
+  will-change: transform;
+  transition: transform 0.05s ease-out;
+}
+
+/* This is the layer that is normally masked but upon cursor hover is unmasked */
+.reveal-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-color: green;
+
+  z-index: 40;
+
+  mask: url(#cursorMask);
+
+  /* clip-path: circle(28px at var(--cursor-x) var(--cursor-y));
+  will-change: clip-path;
+  transition: clip-path 0.05s ease-out; */
 }
