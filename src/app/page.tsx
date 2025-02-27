@@ -3,6 +3,7 @@
 import SocialMediaLinks from "@/components/SocialMediaLinks";
 import DownButton from "@/assets/DownButton.svg";
 import CustomCursor from "@/components/CustomCursor";
+import BlurryMovingBlobs from "@/components/BlurryMovingBlobs";
 
 
 // import React, { useRef, useEffect, useState } from 'react';
@@ -10,14 +11,20 @@ import CustomCursor from "@/components/CustomCursor";
 
 export default function Home() {
 
-  // const revealLayerRef = useRef<HTMLDivElement>(null);
-
   return (
-    <div className="div h-full w-full flex">
-      <div className="reveal-layer absolute h-full w-full"><p>hi</p></div>
-      <SocialMediaLinks />
-      <img src={DownButton.src} className="h-20" />
+    <div className="h-screen w-full grid-overlap-container">
       <CustomCursor />
+      <div className="custom-cursor-reveal-layer h-full w-full z-20 grid-overlap-container grid-overlap-element">
+        <BlurryMovingBlobs className="bg-darkest-purple grid-overlap-element"/>
+        <div className="h-screen w-full px-[15%] grid-overlap-element">
+          hi from masked overlapper
+        </div>
+      </div>
+      <div className="main-content-layer h-full w-full z-10 px-[15%] grid-overlap-element">
+        <SocialMediaLinks />
+        hi from non-overlapper!
+      </div>
+      <img src={DownButton.src} className="h-20" />
     </div>
   );
 }

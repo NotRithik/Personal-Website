@@ -24,6 +24,7 @@ body {
   --cursor-y: 0; */
   min-height: 100vh;
   min-width: 100vw;
+  /* background-color: black; */
 }
 
 .custom-cursor {
@@ -31,7 +32,7 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 50;
+  z-index: 100;
 
   transform: translate(calc(var(--cursor-x) - 50%), calc(var(--cursor-y) - 50%));
   will-change: transform;
@@ -39,17 +40,30 @@ body {
 }
 
 /* This is the layer that is normally masked but upon cursor hover is unmasked */
-.reveal-layer {
+.custom-cursor-reveal-layer {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  background-color: green;
 
-  z-index: 40;
+  z-index: 50;
 
   mask: url(#cursorMask);
 
   /* clip-path: circle(28px at var(--cursor-x) var(--cursor-y));
   will-change: clip-path;
   transition: clip-path 0.05s ease-out; */
+}
+
+.grid-overlap-container {
+  display: grid;
+  grid-template: "content-area";
+}
+
+.grid-overlap-element {
+  /* display: grid; */
+  grid-area: content-area;
+}
+
+.blurry-blobs-container {
+  pointer-events: none; /* Make sure it doesn't interfere with interactions */
 }

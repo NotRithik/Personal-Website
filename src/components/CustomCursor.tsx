@@ -49,7 +49,7 @@ function CustomCursor() {
                 cursorElement.style.setProperty('--transition-duration', `0.s`);
             }
 
-            const revealLayerElements = document.querySelectorAll('.reveal-layer'); // Select all elements with class 'reveal-layer'
+            const revealLayerElements = document.querySelectorAll('.custom-cursor-reveal-layer'); // Select all elements with class 'reveal-layer'
 
             if (revealLayerElements) { // Check if any elements are found
                 revealLayerElements.forEach(element => { // Iterate over NodeList
@@ -61,8 +61,6 @@ function CustomCursor() {
             }
 
         }
-
-
 
         return () => window.removeEventListener('mousemove', throttledMouseMove);
     }, []);
