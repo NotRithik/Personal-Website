@@ -8,6 +8,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'inter': ['var(--font-inter)'],
+        'jacquard-12': ['var(--font-jacquard-12)'],
+        'jim-nightshade': ['var(--font-jim-nightshade)'],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

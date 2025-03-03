@@ -1,7 +1,7 @@
 // src/components/CustomCursor.tsx
 'use client';
 
-import React, { useEffect, useRef, useState, useCallback } from 'react'; // Import useCallback
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import CursorArrow from "@/assets/CursorArrow.svg";
 import CursorCircle from "@/assets/CursorCircle.svg";
 
@@ -13,18 +13,18 @@ interface CustomCursor {
 }
 
 const CustomCursor: React.FC<CustomCursor> = ({ doesPageScroll }) => {
-    const arrowsContainerRef = useRef<HTMLDivElement>(null); // Ref for the container to animate
-    const maskCircleRef = useRef<SVGCircleElement>(null); // Ref for the circle INSIDE the mask
-    const [isPlayingClickedAnimation, setIsPlayingClickedAnimation] = useState(false); // State to track click, renamed
+    const arrowsContainerRef = useRef<HTMLDivElement>(null);
+    const maskCircleRef = useRef<SVGCircleElement>(null);
+    const [isPlayingClickedAnimation, setIsPlayingClickedAnimation] = useState(false);
 
     const updateMaskPosition = useCallback((clientX: number, clientY: number) => {
         if (maskCircleRef.current) {
-            gsap.to(maskCircleRef.current, { // Animate the maskCircleRef.current element
-                duration: 0.05, // Transition duration (0.05s)
-                ease: 'easeOut', // Ease-out easing
-                attr: { // Animate SVG attributes
-                    cx: clientX, // Animate 'cx' to mouse X
-                    cy: clientY + (doesPageScroll ? window.scrollY : 0) // Animate 'cy' to mouse Y, conditionally add scroll
+            gsap.to(maskCircleRef.current, {
+                duration: 0.05,
+                ease: 'easeOut',
+                attr: {
+                    cx: clientX,
+                    cy: clientY + (doesPageScroll ? window.scrollY : 0)
                 }
             });
         }
@@ -44,8 +44,6 @@ const CustomCursor: React.FC<CustomCursor> = ({ doesPageScroll }) => {
 
         // Scroll tracking - NEW
         const handleScroll = () => {
-            // We need to get the current mouse position to update the mask correctly on scroll
-            // We can read it from the CSS variables we set in handleMouseMove
             const rootElement = document.documentElement;
             const cursorX = parseInt(rootElement.style.getPropertyValue('--cursor-x') || '0', 10);
             const cursorY = parseInt(rootElement.style.getPropertyValue('--cursor-y') || '0', 10);
@@ -55,43 +53,44 @@ const CustomCursor: React.FC<CustomCursor> = ({ doesPageScroll }) => {
         window.addEventListener('scroll', handleScroll);
 
 
-        // Initial cursor position (remains the same)
+        // Initial cursor position - set to center of screen
         const rootElementOnMount = document.documentElement;
-        rootElementOnMount.style.setProperty('--cursor-x', `0px`);
-        rootElementOnMount.style.setProperty('--cursor-y', `0px`);
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        rootElementOnMount.style.setProperty('--cursor-x', `${centerX}px`);
+        rootElementOnMount.style.setProperty('--cursor-y', `${centerY}px`);
+
+        updateMaskPosition(centerX, centerY); // Initialize mask position at center
+
 
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-        // Because Safari is a piece of shit. Gotta handle transition durations differently
-        // and disable certain animations / elements entirely because they're so choppy!
 
         if (isSafari) {
-            const cursorElement = document.querySelector('.custom-cursor') as HTMLElement; // Select by class name
-            if (cursorElement) { // Check if element is found
+            const cursorElement = document.querySelector('.custom-cursor') as HTMLElement;
+            if (cursorElement) {
                 cursorElement.style.setProperty('--transition-duration', `0.s`);
             }
 
-            const revealLayerElements = document.querySelectorAll('.custom-cursor-reveal-layer'); // Select all elements with class 'reveal-layer'
+            const revealLayerElements = document.querySelectorAll('.custom-cursor-reveal-layer');
 
-            if (revealLayerElements) { // Check if any elements are found
-                revealLayerElements.forEach(element => { // Iterate over NodeList
-                    const revealLayerElement = element as HTMLElement | null; // Type cast each element
-                    if (revealLayerElement) { // Check if element is valid (not null after casting)
+            if (revealLayerElements) {
+                revealLayerElements.forEach(element => {
+                    const revealLayerElement = element as HTMLElement | null;
+                    if (revealLayerElement) {
                         revealLayerElement.style.visibility = 'hidden';
                     }
                 });
             }
-
         }
 
         return () => {
             window.removeEventListener('mousemove', throttledMouseMove);
-            window.removeEventListener('scroll', handleScroll); // Remove scroll event listener
+            window.removeEventListener('scroll', handleScroll);
         };
-    }, [updateMaskPosition]); // Dependency array includes updateMaskPosition
+    }, [updateMaskPosition]);
 
 
     useEffect(() => {
-        // Cursor hiding (remains the same)
         document.body.style.cursor = 'none';
         return () => {
             document.body.style.cursor = 'default';
@@ -103,48 +102,46 @@ const CustomCursor: React.FC<CustomCursor> = ({ doesPageScroll }) => {
             const arrowsContainer = arrowsContainerRef.current;
 
             const tl = gsap.timeline({
-                onComplete: () => setIsPlayingClickedAnimation(false) // Reset click state after animation
+                onComplete: () => setIsPlayingClickedAnimation(false)
             });
 
-            tl.to(arrowsContainer, { // Back-up animation
+            tl.to(arrowsContainer, {
                 duration: 0.2,
                 width: '128px',
                 height: '128px',
                 ease: 'power2.inOut',
             });
-            tl.to(arrowsContainer, { // Run-up and disappear animation
+            tl.to(arrowsContainer, {
                 duration: 0.2,
                 width: '8px',
                 height: '8px',
                 ease: 'power3.easeIn',
-            }, ">"); // ">" aligns this tween to start at the end of the previous tween in the timeline
-            tl.set(arrowsContainer, { // Make container super big instantly
-                width: '100vw', // Example: Full viewport width
-                height: '100vh', // Example: Full viewport height
-                immediateRender: false // Ensure set happens at this point in timeline
-            }, ">"); // ">" aligns this tween to start at the end of the previous tween in the timeline
-            tl.to(arrowsContainer, { // Shrink back to original size
+            }, ">");
+            tl.set(arrowsContainer, {
+                width: '100vw',
+                height: '100vh',
+                immediateRender: false
+            }, ">");
+            tl.to(arrowsContainer, {
                 duration: 0.25,
                 width: '96px',
                 height: '96px',
-                ease: 'power2.easeOut', // Ease-out for shrinking back
-            }, ">"); // ">" aligns this tween to start at the end of the previous tween in the timeline
+                ease: 'power2.easeOut',
+            }, ">");
         }
-    }, [isPlayingClickedAnimation]); // Renamed state in dependency array
+    }, [isPlayingClickedAnimation]);
 
-    const handleClickAnimation = useCallback(() => { // Renamed function, now useCallback
-        setIsPlayingClickedAnimation(true); // Trigger click animation on click, renamed state
+    const handleClickAnimation = useCallback(() => {
+        setIsPlayingClickedAnimation(true);
     }, []);
 
     useEffect(() => {
-        // Add click event listener to the document when component mounts
         document.addEventListener('click', handleClickAnimation);
 
-        // Cleanup: Remove the event listener when component unmounts
         return () => {
             document.removeEventListener('click', handleClickAnimation);
         };
-    }, [handleClickAnimation]); // Dependency on handleClickAnimation for useCallback
+    }, [handleClickAnimation]);
 
 
     return (<div className="custom-cursor select-none">

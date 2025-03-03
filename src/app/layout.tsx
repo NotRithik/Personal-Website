@@ -1,20 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Jacquard_12, Jim_Nightshade } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jacquard12 = Jacquard_12({
+  weight: "400",
+  variable: "--font-jacquard-12",
+  subsets: ["latin"],
+});
+
+const jimNightshade = Jim_Nightshade({
+  weight: "400",
+  variable: "--font-jim-nightshade",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Rithik's Personal Website",
-  description: "Rithik's Personal Website",
+  title: "Rithik Kumar S",
+  description: "Proof Of Mind",
 };
 
 export default function RootLayout({
@@ -25,7 +32,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-full w-full`}
+        className={`${inter.variable} ${jacquard12.variable} ${jimNightshade.variable} antialiased h-full w-full`}
       >
         {children}
       </body>

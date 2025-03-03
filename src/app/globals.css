@@ -2,6 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .text-radial-gradient {
+    @apply text-transparent;
+    /* Make the text itself transparent */
+    background-clip: text;
+    -webkit-background-clip: text;
+    /* For Safari compatibility */
+    background-image: radial-gradient(circle at center,
+        theme('colors.light-purple') 20%,
+        theme('colors.dark-purple') 69%);
+  }
+
+  .user-drag-none {
+    -webkit-user-drag: none;
+    /* For Safari and Chrome */
+    user-drag: none;
+  }
+
+
+  .text-stroke-2 {
+    -webkit-text-stroke: 2px black;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .text-stroke-shadow {
+    text-shadow:
+      -1px -1px 0 black, /* Top left */
+      1px -1px 0 black,  /* Top right */
+      -1px 1px 0 black,  /* Bottom left */
+      1px 1px 0 black;   /* Bottom right */
+  }
+
+}
+
 /* :root { */
 /* --background: #ffffff;
   --foreground: #171717; */
@@ -25,6 +59,8 @@ body {
   min-height: 100vh;
   min-width: 100vw;
   /* background-color: black; */
+
+  z-index: inherit;
 }
 
 .custom-cursor {
@@ -70,6 +106,7 @@ body {
   grid-template: "social-media navbar"
     "content-1 content-1"
     "content-2 content-2";
+  grid-template-columns: 1fr 1fr;
   grid-template-rows: 2fr 8fr 2.8fr;
 }
 
@@ -96,4 +133,28 @@ body {
 
 .grid-overlap-element {
   grid-area: content-area;
+}
+
+.ambient-lighting-container {
+  pointer-events: none;
+}
+
+.ambient-light-rectangle {
+  border-radius: 20px;
+  filter: blur(128px);
+  opacity: 0.4;
+  pointer-events: none;
+  align-self: center;
+}
+
+.ambient-light-rectangle.secondary {
+  background: black;
+  opacity: 1;
+  width: 20%;
+}
+
+.ambient-light-rectangle.primary {
+  background: #863B87;
+  opacity: 0.65;
+  width: 80%;
 }
